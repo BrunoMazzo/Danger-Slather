@@ -1,6 +1,6 @@
 # Danger-slather
 
-A Danger plugin that show code coverage of a Xcode project and file by file. Add warnings or fail the build if a minimum coverage are not achieved. It uses Slather Framework for calculate coverage, so it's required to configurate the slather object before using it.
+A [Danger](http://danger.systems/) plugin that show code coverage of a Xcode project and file by file using [Slather](https://github.com/SlatherOrg/slather). Add warnings or fail the build if a minimum coverage are not achieved. It uses Slather Framework for calculate coverage, so it's required to configure the slather object before using it.
 
 ## How does it look?
 <table>
