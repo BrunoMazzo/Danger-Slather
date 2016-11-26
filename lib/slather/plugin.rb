@@ -58,7 +58,7 @@ module Danger
         input_format: nil,
         binary_file: nil,
         decimals: nil,
-        post: true)
+        post: false)
       @project = Slather::Project.open(xcodeproj_path)
       @project.scheme = scheme
       @project.workspace = workspace
