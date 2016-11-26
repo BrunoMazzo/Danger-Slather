@@ -1,5 +1,4 @@
-# frozen_string_literal: true
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "danger"
-gem "slather"
+# Specify your gem's dependencies in danger-slather.gemspec
+gemspec
