@@ -84,7 +84,7 @@ module Danger
     #
     def notify_if_coverage_is_less_than(notify_level: :fail, minimum_coverage:)
       if total_coverage < minimum_coverage
-        notify_message = "Total coverage less than #{minimum_coverage} code coverage"
+        notify_message = "Total coverage less than #{minimum_coverage}%"
         if notify_level == :fail
           fail notify_message
         else
@@ -107,7 +107,7 @@ module Danger
         if modified_files_coverage.count > 0
           modified_files_coverage.each{ |file|
             if file.percentage_lines_tested < minimum_coverage
-              notify_message = "#{file.source_file_pathname_relative_to_repo_root.to_s} has less than #{minimum_coverage} code coverage"
+              notify_message = "#{file.source_file_pathname_relative_to_repo_root.to_s} has less than #{minimum_coverage}% code coverage"
               if notify_level == :fail
                 fail notify_message
               else

@@ -42,7 +42,7 @@ module Danger
 
           @my_plugin.notify_if_modified_file_is_less_than(minimum_coverage: 50)
 
-          expect(@dangerfile.status_report[:errors]).to eq(["AppDelegate.swift has less than 50 code coverage"])
+          expect(@dangerfile.status_report[:errors]).to eq(["AppDelegate.swift has less than 50% code coverage"])
         end
 
         it "Should not fail if coverage is higher than parameter" do
@@ -67,7 +67,7 @@ module Danger
           @my_plugin.notify_if_modified_file_is_less_than(minimum_coverage: 50, notify_level: :warning)
 
           expect(@dangerfile.status_report[:errors]).to eq([])
-          expect(@dangerfile.status_report[:warnings]).to eq(["AppDelegate.swift has less than 50 code coverage"])
+          expect(@dangerfile.status_report[:warnings]).to eq(["AppDelegate.swift has less than 50% code coverage"])
         end
       end
 
@@ -82,7 +82,7 @@ module Danger
 
           @my_plugin.notify_if_coverage_is_less_than(minimum_coverage: 50)
 
-          expect(@dangerfile.status_report[:errors]).to eq(["Total coverage less than 50 code coverage"])
+          expect(@dangerfile.status_report[:errors]).to eq(["Total coverage less than 50%"])
         end
 
         it "Should not fails if total coverage is greather than minimum" do
@@ -119,7 +119,7 @@ module Danger
           @my_plugin.notify_if_coverage_is_less_than(minimum_coverage: 50, notify_level: :warning)
 
           expect(@dangerfile.status_report[:errors]).to eq([])
-          expect(@dangerfile.status_report[:warnings]).to eq(["Total coverage less than 50 code coverage"])
+          expect(@dangerfile.status_report[:warnings]).to eq(["Total coverage less than 50%"])
         end
       end
 
