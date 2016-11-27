@@ -5,31 +5,14 @@ module Danger
   # before using it.
   #
   # @example Require a minimum file coverage of 30%, a project coverage of 60% and show all modified files coverage
-  #
   #       slather.configure("Path/to/my/project.xcodeproj", "MyScheme")
   #       slather.notify_if_coverage_is_less_than(minimum_coverage: 60)
   #       slather.notify_if_modified_file_is_less_than(minimum_coverage: 30)
   #       slather.show_coverage
   #
-  # @see  Bruno Mazzo/danger-slather
-  # @tags slather, code coverage
+  # @see  BrunoMazzo/danger-slather
+  # @tags slather, code coverage, xcode, iOS
   class DangerSlather < Plugin
-    # Total coverage of the project
-    # @return   [Float]
-    def total_coverage
-      unless @project.nil?
-        @total_coverage ||= begin
-          total_project_lines = 0
-          total_project_lines_tested = 0
-          @project.coverage_files.each do |coverage_file|
-            total_project_lines_tested += coverage_file.num_lines_tested
-            total_project_lines += coverage_file.num_lines_testable
-          end
-          @total_coverage = (total_project_lines_tested / total_project_lines.to_f) * 100.0
-        end
-      end
-    end
-
     # Required method to configure slather. It's required at least the path
     # to the project and the scheme used with code coverage enabled
     # @return  [void]
@@ -49,6 +32,22 @@ module Danger
       @project.decimals = options[:decimals]
       @project.configure
       @project.post if options[:post]
+    end
+
+    # Total coverage of the project
+    # @return   [Float]
+    def total_coverage
+      unless @project.nil?
+        @total_coverage ||= begin
+          total_project_lines = 0
+          total_project_lines_tested = 0
+          @project.coverage_files.each do |coverage_file|
+            total_project_lines_tested += coverage_file.num_lines_tested
+            total_project_lines += coverage_file.num_lines_testable
+          end
+          @total_coverage = (total_project_lines_tested / total_project_lines.to_f) * 100.0
+        end
+      end
     end
 
     # Method to check if the coverage of the project is at least a minumum
@@ -151,5 +150,7 @@ module Danger
         end
       end
     end
+
+    private :modified_files_coverage
   end
 end
