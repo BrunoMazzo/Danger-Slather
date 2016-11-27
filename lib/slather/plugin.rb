@@ -95,11 +95,19 @@ module Danger
       end
     end
 
+    # String header with the total coverage of the project
+    # @return [String]
+    def total_coverage_markdown
+      unless @project.nil?
+        "### Total coverage: **`#{@project.decimal_f([total_coverage])}%`**\n"
+      end
+    end
+
     # Show a header with the total coverage of the project
     # @return [Array<String>]
     def show_total_coverage
       unless @project.nil?
-        markdown "# Coverage #{@project.decimal_f([total_coverage])}%"
+        markdown total_coverage_markdown
       end
     end
 
@@ -114,7 +122,7 @@ module Danger
           modified_files_coverage.each do |coverage_file|
             file_name = coverage_file.source_file_pathname_relative_to_repo_root.to_s
             percentage = @project.decimal_f([coverage_file.percentage_lines_tested])
-            line << "#{file_name} | #{percentage}\n"
+            line << "#{file_name} | **`#{percentage}%`**\n"
           end
         end
         return line
@@ -134,7 +142,7 @@ module Danger
     def show_coverage
       unless @project.nil?
         line = "## Code coverage\n"
-        line << "Total coverage: #{total_coverage}\n\n"
+        line << total_coverage_markdown
         line << modified_files_coverage_table
         line << '> Powered by [Slather](https://github.com/SlatherOrg/slather)'
         markdown line
@@ -151,6 +159,6 @@ module Danger
       end
     end
 
-    private :modified_files_coverage
+    private :modified_files_coverage, :total_coverage_markdown
   end
 end

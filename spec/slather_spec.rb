@@ -176,15 +176,14 @@ module Danger
 
           expect(@dangerfile.status_report[:markdowns][0].message).to eq(
             "## Code coverage
-Total coverage: 35.0
-
+### Total coverage: **`35.00%`**
 File | Coverage
 -----|-----
-AppDelegate.swift | 10.00
-ViewController.swift | 20.00
-ViewController2.swift | 30.00
-ViewController3.swift | 40.00
-ViewController4.swift | 50.00
+AppDelegate.swift | **`10.00%`**
+ViewController.swift | **`20.00%`**
+ViewController2.swift | **`30.00%`**
+ViewController3.swift | **`40.00%`**
+ViewController4.swift | **`50.00%`**
 > Powered by [Slather](https://github.com/SlatherOrg/slather)"
           )
         end
