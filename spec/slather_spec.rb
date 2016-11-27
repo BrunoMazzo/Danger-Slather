@@ -185,7 +185,6 @@ ViewController.swift | 20.00
 ViewController2.swift | 30.00
 ViewController3.swift | 40.00
 ViewController4.swift | 50.00
-ViewController5.swift | 60.00
 > Powered by [Slather](https://github.com/SlatherOrg/slather)"
           )
         end

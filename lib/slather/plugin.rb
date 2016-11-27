@@ -113,12 +113,19 @@ module Danger
     # @return [String]
     def modified_files_coverage_table
       unless @project.nil?
-        line = "File | Coverage\n"
-        line << "-----|-----\n"
-        @project.coverage_files.each do |coverage_file|
-          file_name = coverage_file.source_file_pathname_relative_to_repo_root.to_s
-          percentage = @project.decimal_f([coverage_file.percentage_lines_tested])
-          line << "#{file_name} | #{percentage}\n"
+
+        modified_files_coverage = @project.coverage_files.select do |file|
+          git.modified_files.include? file.source_file_pathname_relative_to_repo_root.to_s
+        end
+        line = ''
+        if modified_files_coverage.count > 0
+          line << "File | Coverage\n"
+          line << "-----|-----\n"
+          modified_files_coverage.each do |coverage_file|
+            file_name = coverage_file.source_file_pathname_relative_to_repo_root.to_s
+            percentage = @project.decimal_f([coverage_file.percentage_lines_tested])
+            line << "#{file_name} | #{percentage}\n"
+          end
         end
         return line
       end
