@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
 
   # Testing support
   spec.add_development_dependency 'rspec', '~> 3.4'
-  spec.add_development_dependency 'mocha'
+  spec.add_development_dependency 'mocha', '~> 1.2'
 
   # Linting code and docs
   spec.add_development_dependency "rubocop", "~> 0.41"
@@ -51,5 +51,5 @@ Gem::Specification.new do |spec|
   #    binding.pry
   #
   # This will stop test execution and let you inspect the results
-  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'pry', '~> 0.9'
 end
