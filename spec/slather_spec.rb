@@ -4,7 +4,7 @@ require 'slather'
 
 module Danger
   describe Danger::DangerSlather do
-    def mock_file(name:, coverage:)
+    def mock_file(name, coverage)
       mock("File #{name}") do
         stubs(:source_file_pathname_relative_to_repo_root).returns(name)
         stubs(:num_lines_tested).returns(coverage)
@@ -26,10 +26,7 @@ module Danger
         @project_mock.stubs(:configure)
         @project_mock.stubs(:post)
         Slather::Project.stubs(:open).returns(@project_mock)
-        @my_plugin.configure(
-          xcodeproj_path: 'XcodeProject.xcodeproj',
-          scheme: 'Danger-Slather'
-        )
+        @my_plugin.configure('XcodeProject.xcodeproj', 'Danger-Slather')
       end
 
       describe 'notify_if_modified_file_is_less_than' do
@@ -38,9 +35,9 @@ module Danger
 
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 10),
-              mock_file(name: 'ViewController2.swift', coverage: 20),
-              mock_file(name: 'ViewController.swift', coverage: 80)
+              mock_file('AppDelegate.swift', 10),
+              mock_file('ViewController2.swift', 20),
+              mock_file('ViewController.swift', 80)
             ]
           )
 
@@ -58,7 +55,7 @@ module Danger
 
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 80)
+              mock_file('AppDelegate.swift', 80)
             ]
           )
 
@@ -72,7 +69,7 @@ module Danger
 
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 10)
+              mock_file('AppDelegate.swift', 10)
             ]
           )
 
@@ -91,9 +88,9 @@ module Danger
         it 'Should fails if total coverage is less than minimum' do
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 10),
-              mock_file(name: 'ViewController2.swift', coverage: 20),
-              mock_file(name: 'ViewController.swift', coverage: 20)
+              mock_file('AppDelegate.swift', 10),
+              mock_file('ViewController2.swift', 20),
+              mock_file('ViewController.swift', 20)
             ]
           )
 
@@ -109,9 +106,9 @@ module Danger
         it 'Should not fails if total coverage is greather than minimum' do
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 50),
-              mock_file(name: 'ViewController2.swift', coverage: 80),
-              mock_file(name: 'ViewController.swift', coverage: 80)
+              mock_file('AppDelegate.swift', 50),
+              mock_file('ViewController2.swift', 80),
+              mock_file('ViewController.swift', 80)
             ]
           )
 
@@ -123,9 +120,9 @@ module Danger
         it 'Should not fails if total coverage is greather than minimum and has files with less than total minimum' do
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 20),
-              mock_file(name: 'ViewController2.swift', coverage: 80),
-              mock_file(name: 'ViewController.swift', coverage: 80)
+              mock_file('AppDelegate.swift', 20),
+              mock_file('ViewController2.swift', 80),
+              mock_file('ViewController.swift', 80)
             ]
           )
 
@@ -137,7 +134,7 @@ module Danger
         it 'Should add warning if notify_level is warning' do
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 10)
+              mock_file('AppDelegate.swift', 10)
             ]
           )
 
@@ -166,12 +163,12 @@ module Danger
 
           @project_mock.stubs(:coverage_files).returns(
             [
-              mock_file(name: 'AppDelegate.swift', coverage: 10),
-              mock_file(name: 'ViewController.swift', coverage: 20),
-              mock_file(name: 'ViewController2.swift', coverage: 30),
-              mock_file(name: 'ViewController3.swift', coverage: 40),
-              mock_file(name: 'ViewController4.swift', coverage: 50),
-              mock_file(name: 'ViewController5.swift', coverage: 60)
+              mock_file('AppDelegate.swift', 10),
+              mock_file('ViewController.swift', 20),
+              mock_file('ViewController2.swift', 30),
+              mock_file('ViewController3.swift', 40),
+              mock_file('ViewController4.swift', 50),
+              mock_file('ViewController5.swift', 60)
             ]
           )
 

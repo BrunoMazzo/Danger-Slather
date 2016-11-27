@@ -6,11 +6,9 @@ module Danger
   # calculate coverage, so it's required to configurate the slather object
   # before using it.
   #
-  # @example Require a minimum file coverage of 30%, a project coverage of 60%
-  # and show all modified files coverage
+  # @example Require a minimum file coverage of 30%, a project coverage of 60% and show all modified files coverage
   #
-  #       slather.configure(xcodeproj_path: "Path/to/my/project.xcodeproj",
-  # scheme: "MyScheme")
+  #       slather.configure("Path/to/my/project.xcodeproj", "MyScheme")
   #       slather.notify_if_coverage_is_less_than(minimum_coverage: 60)
   #       slather.notify_if_modified_file_is_less_than(minimum_coverage: 30)
   #       slather.show_coverage
@@ -37,7 +35,7 @@ module Danger
     # Required method to configure slather. It's required at least the path
     # to the project and the scheme used with code coverage enabled
     # @return  [void]
-    def configure(xcodeproj_path:, scheme:, options: {})
+    def configure(xcodeproj_path, scheme, options: {})
       @project = Slather::Project.open(xcodeproj_path)
       @project.scheme = scheme
       @project.workspace = options[:workspace]
@@ -56,10 +54,13 @@ module Danger
     end
 
     # Method to check if the coverage of the project is at least a minumum
-    # @param notify_level [Symbol] the level of notification
-    # @param minimum_coverage [Float] the minimum code coverage required
+    # @param options [Hash] a hash with the options
+    # @option options [Float] :minimum_coverage the minimum code coverage required
+    # @option options [Symbol] :notify_level the level of notification
     # @return [Array<String>]
-    def notify_if_coverage_is_less_than(notify_level: :fail, minimum_coverage:)
+    def notify_if_coverage_is_less_than(options)
+      minimum_coverage = options[:minimum_coverage]
+      notify_level = options[:notify_level] || :fail
       if total_coverage < minimum_coverage
         notify_message = "Total coverage less than #{minimum_coverage}%"
         if notify_level == :fail
@@ -71,10 +72,14 @@ module Danger
     end
 
     # Method to check if the coverage of modified files is at least a minumum
-    # @param notify_level [Symbol] the level of notification
-    # @param minimum_coverage [Float] the minimum code coverage required for a file
+    # @param options [Hash] a hash with the options
+    # @option options [Float] :minimum_coverage the minimum code coverage required for a file
+    # @option options [Symbol] :notify_level the level of notification
     # @return [Array<String>]
-    def notify_if_modified_file_is_less_than(notify_level: :fail, minimum_coverage:)
+    def notify_if_modified_file_is_less_than(options)
+      minimum_coverage = options[:minimum_coverage]
+      notify_level = options[:notify_level] || :fail
+
       modified_files_coverage = @project.coverage_files.select do |file|
         git.modified_files.include? file.source_file_pathname_relative_to_repo_root.to_s
       end
@@ -85,6 +90,7 @@ module Danger
         notify_messages = files_to_notify.map do |file|
           "#{file.source_file_pathname_relative_to_repo_root} has less than #{minimum_coverage}% code coverage"
         end
+
         notify_messages.each do |message|
           if notify_level == :fail
             fail message
