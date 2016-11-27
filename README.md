@@ -61,7 +61,7 @@ ViewController5.swift | 60.00
 
 Just add this line to your `Dangerfile`:
 
-    slather.configure(xcodeproj_path: "Path/to/my/project.xcodeproj", scheme: "MyScheme")
+    slather.configure("Path/to/my/project.xcodeproj", "MyScheme")
     slather.notify_if_coverage_is_less_than(minimum_coverage: 60)
     slather.notify_if_modified_file_is_less_than(minimum_coverage: 30)
     slather.show_coverage
