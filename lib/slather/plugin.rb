@@ -1,5 +1,3 @@
-require 'slather'
-
 module Danger
   # Show code coverage of the project and by file. Add warnings or fail the
   # Build if a minimum coverage are not achieved. It uses Slather Framework for
@@ -80,9 +78,6 @@ module Danger
       minimum_coverage = options[:minimum_coverage]
       notify_level = options[:notify_level] || :fail
 
-      modified_files_coverage = @project.coverage_files.select do |file|
-        git.modified_files.include? file.source_file_pathname_relative_to_repo_root.to_s
-      end
       if modified_files_coverage.count > 0
         files_to_notify = modified_files_coverage.select do |file|
           file.percentage_lines_tested < minimum_coverage
@@ -113,10 +108,6 @@ module Danger
     # @return [String]
     def modified_files_coverage_table
       unless @project.nil?
-
-        modified_files_coverage = @project.coverage_files.select do |file|
-          git.modified_files.include? file.source_file_pathname_relative_to_repo_root.to_s
-        end
         line = ''
         if modified_files_coverage.count > 0
           line << "File | Coverage\n"
@@ -148,6 +139,16 @@ module Danger
         line << modified_files_coverage_table
         line << '> Powered by [Slather](https://github.com/SlatherOrg/slather)'
         markdown line
+      end
+    end
+
+    # Array of files that we have coverage information and was modified
+    # @return [Array<File>]
+    def modified_files_coverage
+      unless @project.nil?
+        @project.coverage_files.select do |file|
+          git.modified_files.include? file.source_file_pathname_relative_to_repo_root.to_s
+        end
       end
     end
   end

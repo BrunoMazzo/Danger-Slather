@@ -59,11 +59,33 @@ ViewController5.swift | 60.00
 
 ## Usage
 
-Just add this line to your `Dangerfile`:
+First configure the slather object:
 
     slather.configure("Path/to/my/project.xcodeproj", "MyScheme")
-    slather.notify_if_coverage_is_less_than(minimum_coverage: 60)
-    slather.notify_if_modified_file_is_less_than(minimum_coverage: 30)
+
+For a more complex case:
+
+    slather.configure("Path/to/my/project.xcodeproj", "MyScheme", options: {
+      workspace: 'Path/to/my/workspace.xcworkspace',
+      build_directory: = 'Path/to/my/build_directory',
+      ignore_list: = 'ignore file list',
+      ci_service: = :travis,
+      coverage_access_token: = 'acc123123123123',
+      coverage_service: = :terminal,
+      source_directory: = 'Path/to/my/source_directory',
+      output_directory: = 'Path/to/my/output_directory',
+      input_format: = 'profdata',
+      binary_file: = 'Path/to/my/output_directory',
+      decimals: = 2
+      post = false      
+    })
+
+For a more complete documentation of all support configuration see [Slather](https://github.com/SlatherOrg/slather)
+
+Than just add this line to your `Dangerfile`:
+
+    slather.notify_if_coverage_is_less_than(minimum_coverage: 80)
+    slather.notify_if_modified_file_is_less_than(minimum_coverage: 60)
     slather.show_coverage
 
 ## Development
