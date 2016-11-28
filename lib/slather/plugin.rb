@@ -78,8 +78,8 @@ module Danger
       minimum_coverage = options[:minimum_coverage]
       notify_level = options[:notify_level] || :fail
 
-      if modified_files_coverage.count > 0
-        files_to_notify = modified_files_coverage.select do |file|
+      if all_modified_files_coverage.count > 0
+        files_to_notify = all_modified_files_coverage.select do |file|
           file.percentage_lines_tested < minimum_coverage
         end
         notify_messages = files_to_notify.map do |file|
@@ -117,10 +117,10 @@ module Danger
     def modified_files_coverage_table
       unless @project.nil?
         line = ''
-        if modified_files_coverage.count > 0
+        if all_modified_files_coverage.count > 0
           line << "File | Coverage\n"
           line << "-----|-----\n"
-          modified_files_coverage.each do |coverage_file|
+          all_modified_files_coverage.each do |coverage_file|
             file_name = coverage_file.source_file_pathname_relative_to_repo_root.to_s
             percentage = @project.decimal_f([coverage_file.percentage_lines_tested])
             line << "#{file_name} | **`#{percentage}%`**\n"
@@ -152,14 +152,21 @@ module Danger
 
     # Array of files that we have coverage information and was modified
     # @return [Array<File>]
-    def modified_files_coverage
+    def all_modified_files_coverage
       unless @project.nil?
-        @project.coverage_files.select do |file|
-          git.modified_files.include? file.source_file_pathname_relative_to_repo_root.to_s
+        all_modified_files_coverage ||= begin
+          modified_files = git.modified_files.nil? ? [] : git.modified_files
+          added_files = git.added_files.nil? ? [] : git.added_files
+          all_changed_files = modified_files | added_files
+          @project.coverage_files.select do |file|
+            all_changed_files.include? file.source_file_pathname_relative_to_repo_root.to_s
+          end
         end
+
+        all_modified_files_coverage
       end
     end
 
-    private :modified_files_coverage, :total_coverage_markdown
+    private :all_modified_files_coverage, :total_coverage_markdown
   end
 end

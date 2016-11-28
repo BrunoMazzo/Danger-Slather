@@ -32,6 +32,7 @@ module Danger
       describe 'notify_if_modified_file_is_less_than' do
         it 'Should only fails on modified files' do
           @dangerfile.git.stubs(:modified_files).returns(['AppDelegate.swift'])
+          @dangerfile.git.stubs(:added_files).returns([])
 
           @project_mock.stubs(:coverage_files).returns(
             [
@@ -52,6 +53,7 @@ module Danger
 
         it 'Should not fail if coverage is higher than parameter' do
           @dangerfile.git.stubs(:modified_files).returns(['AppDelegate.swift'])
+          @dangerfile.git.stubs(:added_files).returns([])
 
           @project_mock.stubs(:coverage_files).returns(
             [
@@ -66,6 +68,7 @@ module Danger
 
         it 'Should add warning if notify_level is warning' do
           @dangerfile.git.stubs(:modified_files).returns(['AppDelegate.swift'])
+          @dangerfile.git.stubs(:added_files).returns([])
 
           @project_mock.stubs(:coverage_files).returns(
             [
@@ -79,6 +82,28 @@ module Danger
           expect(@dangerfile.status_report[:warnings]).to eq(
             [
               'AppDelegate.swift has less than 50% code coverage'
+            ]
+          )
+        end
+
+        it 'Should count new files' do
+          @dangerfile.git.stubs(:modified_files).returns(['AppDelegate.swift'])
+          @dangerfile.git.stubs(:added_files).returns(['ViewController.swift'])
+
+          @project_mock.stubs(:coverage_files).returns(
+            [
+              mock_file('AppDelegate.swift', 10),
+              mock_file('ViewController.swift', 10)
+            ]
+          )
+
+          @my_plugin.notify_if_modified_file_is_less_than(minimum_coverage: 50, notify_level: :warning)
+
+          expect(@dangerfile.status_report[:errors]).to eq([])
+          expect(@dangerfile.status_report[:warnings]).to eq(
+            [
+              'AppDelegate.swift has less than 50% code coverage',
+              'ViewController.swift has less than 50% code coverage'
             ]
           )
         end
@@ -155,7 +180,11 @@ module Danger
             [
               'AppDelegate.swift',
               'ViewController.swift',
-              'ViewController2.swift',
+              'ViewController2.swift'
+            ]
+          )
+          @dangerfile.git.stubs(:added_files).returns(
+            [
               'ViewController3.swift',
               'ViewController4.swift'
             ]
