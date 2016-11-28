@@ -17,6 +17,7 @@ module Danger
     # to the project and the scheme used with code coverage enabled
     # @return  [void]
     def configure(xcodeproj_path, scheme, options: {})
+      require 'slather'
       @project = Slather::Project.open(xcodeproj_path)
       @project.scheme = scheme
       @project.workspace = options[:workspace]

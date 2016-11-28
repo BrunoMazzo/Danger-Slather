@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    danger-slather (0.0.3)
+    danger-slather (0.0.5)
       danger-plugin-api (~> 1.0)
       slather (~> 2.3)
 
