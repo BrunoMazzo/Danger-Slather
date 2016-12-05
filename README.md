@@ -67,17 +67,17 @@ For a more complex case:
 
     slather.configure("Path/to/my/project.xcodeproj", "MyScheme", options: {
       workspace: 'Path/to/my/workspace.xcworkspace',
-      build_directory: = 'Path/to/my/build_directory',
-      ignore_list: = 'ignore file list',
-      ci_service: = :travis,
+      build_directory: 'Path/to/my/build_directory',
+      ignore_list: ['ignore file 1', 'ignore file 2'],
+      ci_service: :travis,
       coverage_access_token: = 'acc123123123123',
-      coverage_service: = :terminal,
-      source_directory: = 'Path/to/my/source_directory',
-      output_directory: = 'Path/to/my/output_directory',
-      input_format: = 'profdata',
-      binary_file: = 'Path/to/my/output_directory',
-      decimals: = 2
-      post = false      
+      coverage_service: :terminal,
+      source_directory: 'Path/to/my/source_directory',
+      output_directory: 'Path/to/my/output_directory',
+      input_format: 'profdata',
+      binary_file: 'Path/to/my/output_directory',
+      decimals: 2
+      post: false      
     })
 
 For a more complete documentation of all support configuration see [Slather](https://github.com/SlatherOrg/slather)
