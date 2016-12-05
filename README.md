@@ -70,7 +70,7 @@ For a more complex case:
       build_directory: 'Path/to/my/build_directory',
       ignore_list: ['ignore file 1', 'ignore file 2'],
       ci_service: :travis,
-      coverage_access_token: = 'acc123123123123',
+      coverage_access_token: 'acc123123123123',
       coverage_service: :terminal,
       source_directory: 'Path/to/my/source_directory',
       output_directory: 'Path/to/my/output_directory',
