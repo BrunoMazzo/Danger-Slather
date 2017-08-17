@@ -76,7 +76,8 @@ For a more complex case:
       output_directory: 'Path/to/my/output_directory',
       input_format: 'profdata',
       binary_file: 'Path/to/my/output_directory',
-      decimals: 2
+      decimals: 2,
+      notify_level: :warning, # Any value here sets it to warning, default is fail
       post: false      
     })
 
