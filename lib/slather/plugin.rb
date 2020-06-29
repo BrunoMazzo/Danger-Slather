@@ -142,7 +142,7 @@ module Danger
     # @return [Array<String>]
     def show_coverage
       unless @project.nil?
-        line = "## Code coverage\n"
+        line = "## #{@project.scheme} code coverage\n"
         line << total_coverage_markdown
         line << modified_files_coverage_table
         line << '> Powered by [Slather](https://github.com/SlatherOrg/slather)'
