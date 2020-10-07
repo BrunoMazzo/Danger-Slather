@@ -31,6 +31,7 @@ module Danger
       @project.input_format = options[:input_format]
       @project.binary_file = options[:binary_file]
       @project.decimals = options[:decimals]
+      @project.binary_basename = options[:binary_basename]
       @project.configure
       @project.post if options[:post]
     end
