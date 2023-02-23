@@ -28,16 +28,16 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'slather', '~> 2.3'
 
   # General ruby development
-  spec.add_development_dependency "bundler", ">= 2.2.33"
-  spec.add_development_dependency 'rake', ">= 12.3.3"
+  spec.add_development_dependency 'bundler', '>= 2.2.33'
+  spec.add_development_dependency 'rake', '>= 12.3.3'
 
   # Testing support
   spec.add_development_dependency 'mocha', '~> 1.2' # Need to redo all tests
   spec.add_development_dependency 'rspec', '~> 3.4'
 
   # Linting code and docs
-  spec.add_development_dependency "yard", "~> 0.8"
-  spec.add_development_dependency "rubocop", "~> 1.0"
+  spec.add_development_dependency 'rubocop', '~> 1.0'
+  spec.add_development_dependency 'yard', '>= 0.9.20'
 
   # Makes testing easy via `bundle exec guard`
   spec.add_development_dependency 'guard', '~> 2.14'
