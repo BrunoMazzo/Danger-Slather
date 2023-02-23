@@ -38,6 +38,16 @@ module Danger
       @project.post if options[:post]
     end
 
+    # Reset local state.
+    # In some cases, you may have more than one configuration that you want to calculate the coverage,
+    # so use the reset method to clean state and start another calculation
+    # @return Void
+    def reset
+      @project = nil
+      @total_coverage = nil
+      @all_modified_files_coverage = nil
+    end
+
     # Total coverage of the project
     # @return   [Float]
     def total_coverage
@@ -157,7 +167,7 @@ module Danger
     # @return [Array<File>]
     def all_modified_files_coverage
       unless @project.nil?
-        all_modified_files_coverage ||= begin
+        @all_modified_files_coverage ||= begin
           modified_files = git.modified_files.nil? ? [] : git.modified_files
           added_files = git.added_files.nil? ? [] : git.added_files
           all_changed_files = modified_files | added_files
@@ -166,7 +176,7 @@ module Danger
           end
         end
 
-        all_modified_files_coverage
+        @all_modified_files_coverage
       end
     end
 
