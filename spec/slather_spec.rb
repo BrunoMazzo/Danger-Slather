@@ -1,16 +1,18 @@
-require File.expand_path('../spec_helper', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('spec_helper', __dir__)
 
 require 'slather'
 
 module Danger
   describe Danger::DangerSlather do
     def mock_file(name, coverage)
-      mock("File #{name}") do
-        stubs(:source_file_pathname_relative_to_repo_root).returns(name)
-        stubs(:num_lines_tested).returns(coverage)
-        stubs(:num_lines_testable).returns(100)
-        stubs(:percentage_lines_tested).returns(coverage)
-      end
+      file_mock = mock("File #{name}")
+      file_mock.expects(:source_file_pathname_relative_to_repo_root).returns(name).at_least(0)
+      file_mock.expects(:num_lines_tested).returns(coverage).at_least(0)
+      file_mock.expects(:num_lines_testable).returns(100).at_least(0)
+      file_mock.expects(:percentage_lines_tested).returns(coverage).at_least(0)
+      return file_mock
     end
 
     it 'should be a plugin' do
@@ -70,20 +72,12 @@ module Danger
           @dangerfile.git.stubs(:modified_files).returns(['AppDelegate.swift'])
           @dangerfile.git.stubs(:added_files).returns([])
 
-          @project_mock.stubs(:coverage_files).returns(
-            [
-              mock_file('AppDelegate.swift', 10)
-            ]
-          )
+          @project_mock.stubs(:coverage_files).returns([mock_file('AppDelegate.swift', 10)])
 
           @my_plugin.notify_if_modified_file_is_less_than(minimum_coverage: 50, notify_level: :warning)
 
           expect(@dangerfile.status_report[:errors]).to eq([])
-          expect(@dangerfile.status_report[:warnings]).to eq(
-            [
-              'AppDelegate.swift has less than 50% code coverage'
-            ]
-          )
+          expect(@dangerfile.status_report[:warnings]).to eq(['AppDelegate.swift has less than 50% code coverage'])
         end
 
         it 'Should count new files' do
@@ -175,36 +169,42 @@ module Danger
       end
 
       describe 'show_coverage' do
-        it 'Should add warning if notify_level is warning' do
-          @dangerfile.git.stubs(:modified_files).returns(
-            [
-              'AppDelegate.swift',
-              'ViewController.swift',
-              'ViewController2.swift'
-            ]
-          )
-          @dangerfile.git.stubs(:added_files).returns(
-            [
-              'ViewController3.swift',
-              'ViewController4.swift'
-            ]
-          )
+        let(:modified_files) do
+          [
+            'AppDelegate.swift',
+            'ViewController.swift',
+            'ViewController2.swift'
+          ]
+        end
 
-          @project_mock.stubs(:coverage_files).returns(
-            [
-              mock_file('AppDelegate.swift', 10),
-              mock_file('ViewController.swift', 20),
-              mock_file('ViewController2.swift', 30),
-              mock_file('ViewController3.swift', 40),
-              mock_file('ViewController4.swift', 50),
-              mock_file('ViewController5.swift', 60)
-            ]
-          )
+        let(:added_files) do
+          [
+            'ViewController3.swift',
+            'ViewController4.swift'
+          ]
+        end
+
+        let(:coverage_files) do
+          [
+            mock_file('AppDelegate.swift', 10),
+            mock_file('ViewController.swift', 20),
+            mock_file('ViewController2.swift', 30),
+            mock_file('ViewController3.swift', 40),
+            mock_file('ViewController4.swift', 50),
+            mock_file('ViewController5.swift', 60)
+          ]
+        end
+
+        it 'Should add warning if notify_level is warning' do
+          @dangerfile.git.stubs(:modified_files).returns(modified_files)
+          @dangerfile.git.stubs(:added_files).returns(added_files)
+
+          @project_mock.stubs(:coverage_files).returns(coverage_files)
 
           @my_plugin.show_coverage
 
           expect(@dangerfile.status_report[:markdowns][0].message).to eq(
-            "## Code coverage
+            "## Danger-Slather code coverage
 ### Total coverage: **`35.00%`**
 File | Coverage
 -----|-----

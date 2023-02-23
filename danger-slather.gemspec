@@ -33,10 +33,10 @@ Gem::Specification.new do |spec|
 
   # Testing support
   spec.add_development_dependency 'rspec', '~> 3.4'
-  spec.add_development_dependency 'mocha', '~> 1.2'
+  spec.add_development_dependency 'mocha', '~> 1.2' # Need to redo all tests
 
   # Linting code and docs
-  spec.add_development_dependency "rubocop", "~> 0.41"
+  spec.add_development_dependency "rubocop", "~> 1.0"
   spec.add_development_dependency "yard", "~> 0.8"
 
   # Makes testing easy via `bundle exec guard`

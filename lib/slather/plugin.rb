@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Danger
   # Show code coverage of the project and by file. Add warnings or fail the
   # Build if a minimum coverage are not achieved. It uses Slather Framework for
@@ -79,7 +81,7 @@ module Danger
       minimum_coverage = options[:minimum_coverage]
       notify_level = options[:notify_level] || :fail
 
-      if all_modified_files_coverage.count > 0
+      if all_modified_files_coverage.count.positive?
         files_to_notify = all_modified_files_coverage.select do |file|
           file.percentage_lines_tested < minimum_coverage
         end
@@ -118,13 +120,13 @@ module Danger
     def modified_files_coverage_table
       unless @project.nil?
         line = ''
-        if all_modified_files_coverage.count > 0
-          line << "File | Coverage\n"
-          line << "-----|-----\n"
+        if all_modified_files_coverage.count.positive?
+          line += "File | Coverage\n"
+          line += "-----|-----\n"
           all_modified_files_coverage.each do |coverage_file|
             file_name = coverage_file.source_file_pathname_relative_to_repo_root.to_s
             percentage = @project.decimal_f([coverage_file.percentage_lines_tested])
-            line << "#{file_name} | **`#{percentage}%`**\n"
+            line += "#{file_name} | **`#{percentage}%`**\n"
           end
         end
         return line
@@ -144,9 +146,9 @@ module Danger
     def show_coverage
       unless @project.nil?
         line = "## #{@project.scheme} code coverage\n"
-        line << total_coverage_markdown
-        line << modified_files_coverage_table
-        line << '> Powered by [Slather](https://github.com/SlatherOrg/slather)'
+        line += total_coverage_markdown
+        line += modified_files_coverage_table
+        line += '> Powered by [Slather](https://github.com/SlatherOrg/slather)'
         markdown line
       end
     end
